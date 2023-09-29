@@ -1,8 +1,7 @@
-import styled from "styled-components";
 import { motion } from "framer-motion";
-
-type StyledElement = ReturnType<typeof styled.div>;
-const S: Record<string, StyledElement> = {};
+import S from "./style";
+import styled from "styled-components";
+import { useRef } from "react";
 
 S.Section = styled.section`
   display: flex;
@@ -12,7 +11,15 @@ S.Section = styled.section`
   align-items: center;
   width: 100%;
   background-color: tomato;
-  overflow: hidden;
+`;
+S.Wrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30rem;
+  height: 30rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  overflow: hidden; // drag area district
 `;
 S.Button = styled.button`
   background-color: rgba(255, 255, 255, 0.9);
@@ -20,8 +27,8 @@ S.Button = styled.button`
   align-items: center;
   justify-content: center;
   border: none;
-  width: 12.5rem;
-  height: 12.5rem;
+  width: 10rem;
+  height: 10rem;
   box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 3rem;
 `;
@@ -35,7 +42,7 @@ const boxVariants = {
     scale: 0.9,
   },
   drag: {
-    backgroundColor: "rgba(0,0,255, 0.2)", // color는 숫자있는 값으로
+    backgroundColor: "rgba(0,0,255, 0.2)", // color is number type
     transition: {
       duration: 2,
     },
@@ -44,17 +51,22 @@ const boxVariants = {
 };
 
 const App = () => {
+  const wrapRef = useRef<HTMLDivElement>(null);
   return (
     <S.Section>
-      <S.Button
-        as={motion.button}
-        drag
-        dragConstraints={{ top: -50, bottom: 50, left: -50, right: 50 }}
-        whileDrag="drag"
-        variants={boxVariants}
-        whileHover="hover"
-        whileTap="click"
-      />
+      <S.Wrap ref={wrapRef}>
+        <S.Button
+          as={motion.button}
+          drag
+          dragSnapToOrigin
+          dragElastic={0.5}
+          dragConstraints={wrapRef}
+          whileDrag="drag"
+          variants={boxVariants}
+          whileHover="hover"
+          whileTap="click"
+        />
+      </S.Wrap>
     </S.Section>
   );
 };
