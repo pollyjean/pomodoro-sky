@@ -1,51 +1,23 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useRef } from "react";
-import styled from "styled-components";
+import { Section, Button } from "./style";
 
-type StyledElement = ReturnType<typeof styled.div>;
-
-const S = {
-  Section: styled.section`
-    display: flex;
-    height: 100vh;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    background-color: tomato;
-  ` as StyledElement,
-  Wrap: styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30rem;
-    height: 30rem;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-  ` as StyledElement,
-  Button: styled.button`
-    background-color: rgba(255, 255, 255, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    width: 10rem;
-    height: 10rem;
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 3rem;
-  ` as StyledElement,
-};
+const S = { Section, Button };
 
 const App = () => {
-  const wrapRef = useRef(null);
   const x = useMotionValue(0);
-  const scale = useTransform(x, [-150, 0, 150], [0.1, 0.2, 0.3]);
+  const rotateZ = useTransform(x, [-300, 0, 300], [-360, 0, 360]);
+  const backgroundImage = useTransform(
+    x,
+    [300, 0, -150],
+    [
+      "linear-gradient(128deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)",
+      "linear-gradient(128deg, rgba(252, 176, 69, 1) 0%, rgba(131, 58, 180, 1) 50%,rgba(253, 29, 29, 1)  100%)",
+      "linear-gradient(128deg, ,rgba(253, 29, 29, 1) 0%,rgba(252, 176, 69, 1)  50%,rgba(131, 58, 180, 1)  100%)",
+    ]
+  );
   return (
-    <S.Section>
-      <button onClick={() => x.set(0)}>move</button>
-      <S.Wrap ref={wrapRef}>
-        <S.Button as={motion.button} style={{ x, scale }} drag="x" dragConstraints={wrapRef} />
-      </S.Wrap>
+    <S.Section as={motion.section} style={{ backgroundImage }}>
+      <S.Button as={motion.button} style={{ x, rotateZ }} drag="x" dragSnapToOrigin />
     </S.Section>
   );
 };
