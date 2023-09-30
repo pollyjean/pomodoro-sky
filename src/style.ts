@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Section = styled.section`
+export const Section = styled.section`
   display: flex;
   height: 200vh;
   flex-direction: column;
@@ -11,7 +11,7 @@ const Section = styled.section`
   background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
 `;
 
-const Wrap = styled.div`
+export const Wrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,7 +21,7 @@ const Wrap = styled.div`
   overflow: hidden;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   background-color: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
@@ -33,4 +33,7 @@ const Button = styled.button`
   border-radius: 3rem;
 `;
 
-export { Section, Wrap, Button };
+export const Svg = styled.svg`
+  height: 3.5rem;
+  overflow: visible;
+`;
