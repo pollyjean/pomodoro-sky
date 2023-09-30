@@ -1,4 +1,5 @@
-import { motion, useMotionValue, useMotionValueEvent } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useRef } from "react";
 import styled from "styled-components";
 
 type StyledElement = ReturnType<typeof styled.div>;
@@ -36,15 +37,14 @@ const S = {
 };
 
 const App = () => {
+  const wrapRef = useRef(null);
   const x = useMotionValue(0);
-  useMotionValueEvent(x, "change", (now) => {
-    console.log(now);
-  });
+  const scale = useTransform(x, [-150, 0, 150], [0.1, 0.2, 0.3]);
   return (
     <S.Section>
-      <S.Wrap>
-        <button onClick={() => x.set(20)}>move</button>
-        <S.Button as={motion.button} style={{ x }} drag="x" dragSnapToOrigin />
+      <button onClick={() => x.set(0)}>move</button>
+      <S.Wrap ref={wrapRef}>
+        <S.Button as={motion.button} style={{ x, scale }} drag="x" dragConstraints={wrapRef} />
       </S.Wrap>
     </S.Section>
   );
