@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValue, useMotionValueEvent } from "framer-motion";
 import styled from "styled-components";
 
 type StyledElement = ReturnType<typeof styled.div>;
@@ -36,38 +35,16 @@ const S = {
   ` as StyledElement,
 };
 
-const boxVariants = {
-  hover: {
-    scale: 1.2,
-    rotateZ: 90,
-  },
-  click: {
-    scale: 0.9,
-  },
-  drag: {
-    backgroundColor: "rgba(0,0,255, 0.2)",
-    transition: {
-      duration: 2,
-    },
-  },
-};
-
 const App = () => {
-  const wrapRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  useMotionValueEvent(x, "change", (now) => {
+    console.log(now);
+  });
   return (
     <S.Section>
-      <S.Wrap ref={wrapRef}>
-        <S.Button
-          as={motion.button}
-          drag
-          dragSnapToOrigin
-          dragElastic={0.5}
-          dragConstraints={wrapRef}
-          whileDrag="drag"
-          variants={boxVariants}
-          whileHover="hover"
-          whileTap="click"
-        />
+      <S.Wrap>
+        <button onClick={() => x.set(20)}>move</button>
+        <S.Button as={motion.button} style={{ x }} drag="x" dragSnapToOrigin />
       </S.Wrap>
     </S.Section>
   );
