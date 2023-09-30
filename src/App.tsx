@@ -1,39 +1,28 @@
-import { motion, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { Section, Button, Svg } from "./style";
-const S = { Section, Button, Svg };
+import { AnimatePresence, motion } from "framer-motion";
+import { Section, Button, Svg, Box } from "./style";
+import { useState } from "react";
+
+const S = { Section, Button, Svg, Box };
 
 const App = () => {
-  const wrapRef = useRef(null);
-  const y = useMotionValue(0);
-  const rotateZ = useTransform(y, [0, 250, 500], [-360, 0, 360]);
-  const { scrollY, scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const [showing, setShowing] = useState(false);
   const svgTransition = {
     start: { fill: "rgba(200, 200, 0, 0)", pathLength: 0 },
     end: { fill: "rgba(120, 220, 120, 0.8)", pathLength: 1 },
     transition: {},
   };
-  const backgroundImage = useTransform(
-    y,
-    [0, 250, 500],
-    [
-      "linear-gradient(128deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)",
-      "linear-gradient(128deg, rgba(252, 176, 69, 1) 0%, rgba(131, 58, 180, 1) 50%,rgba(253, 29, 29, 1)  100%)",
-      "linear-gradient(128deg, ,rgba(253, 29, 29, 1) 0%,rgba(252, 176, 69, 1)  50%,rgba(131, 58, 180, 1)  100%)",
-    ]
-  );
-
-  useMotionValueEvent(scrollY, "change", (latest: number) => {
-    console.log("scrollY", latest);
-  });
-  useMotionValueEvent(scrollYProgress, "change", (latest: number) => {
-    console.log("Progress", latest);
-  });
+  const boxVariants = {
+    initial: { opacity: 0, scale: 0.3, rotateZ: 180 },
+    visible: { opacity: 1, scale: 1, rotateZ: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
+  const onClick = () => {
+    setShowing((prev) => !prev);
+  };
 
   return (
-    <S.Section as={motion.section} style={{ backgroundImage }} ref={wrapRef}>
-      <S.Button as={motion.button} style={{ y, rotateZ, scale }} drag="y" dragConstraints={wrapRef}>
+    <S.Section>
+      <S.Button onClick={onClick}>
         <S.Svg
           xmlns="http://www.w3.org/2000/svg"
           fill="transparent"
@@ -50,6 +39,9 @@ const App = () => {
           />
         </S.Svg>
       </S.Button>
+      <AnimatePresence>
+        {showing && <S.Box as={motion.div} variants={boxVariants} initial="initial" animate="visible" exit="exit" />}
+      </AnimatePresence>
     </S.Section>
   );
 };
