@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 const Section = styled.section`
   display: flex;
-  height: 100vh;
+  height: 200vh;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
+  padding-top: 5rem;
   background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
 `;
 
